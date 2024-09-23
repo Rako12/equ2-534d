@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    .h_iframe iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+      cursor: none; /* Hide the cursor inside the game */
+    }
+  </style>
+</head>
+<body>
+  <!-- Embed iframe container -->
+  <div class="h_iframe">
+    <iframe id="gameIframe" class="archive-iframe" src="https://rejouer.perma.cc?source=generated%2Fwarcs%2FFR%2F7K%2FKV%2FFR7K-KVTD.warc.gz%3Fresponse-content-type%3Dapplication%252Fx-gzip%26response-content-encoding%3D%26X-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Credential%3DAKIAI5E2KCXA6XG5JE2A%252F20240923%252Fus-east-1%252Fs3%252Faws4_request%26X-Amz-Date%3D20240923T221619Z%26X-Amz-Expires%3D900%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Signature%3D30b7197294751d831dce36d98251195b9af8110799be94ed1deced13732b2ed8&amp;url=https%3A%2F%2Fnzp.gay%2F&amp;embed=replayonly" sandbox="allow-scripts allow-forms allow-same-origin allow-downloads allow-modals"></iframe>
+  </div>
+
+  <!-- Main canvas for the shooter game -->
+  <canvas id="gameCanvas"></canvas>
+
+  <script>
+    // RESIZING THE EMBED (RESPONSIVE IFRAME)
+    const resizeIframe = () => {
+      const iframe = document.getElementById('gameIframe');
+      iframe.style.height = window.innerHeight + 'px';
+      iframe.style.width = window.innerWidth + 'px';
+    };
+    window.addEventListener('resize', resizeIframe);
+    resizeIframe(); // Initial resize
+
+    // CANVAS CURSOR LOCK + CAMERA MOVEMENT + SHOOTING
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let isDragging = false;
+    let mouseX = canvas.width / 2;
+    let mouseY = canvas.height / 2;
+
+    // Initialize the canvas dimensions
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Crosshair drawing function
+    function drawCrosshair(x, y) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous frame
+
+      ctx.strokeStyle = '#00FF00';
+      ctx.lineWidth = 2;
+
+      // Draw crosshair
+      ctx.beginPath();
+      ctx.moveTo(x - 10, y);
+      ctx.lineTo(x + 10, y);
+      ctx.moveTo(x, y - 10);
+      ctx.lineTo(x, y + 10);
+      ctx.stroke();
+    }
+
+    // Handle mouse movement (camera movement)
+    canvas.addEventListener('mousemove', function (event) {
+      if (isDragging) {
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+
+        // Add logic for camera movement based on event.movementX and event.movementY
+        drawCrosshair(mouseX, mouseY);
+      }
+    });
+
+    // Handle mouse down event (start dragging)
+    canvas.addEventListener('mousedown', function () {
+      isDragging = true;
+    });
+
+    // Handle mouse up event (stop dragging)
+    canvas.addEventListener('mouseup', function () {
+      isDragging = false;
+    });
+
+    // Shooting logic
+    canvas.addEventListener('click', function () {
+      // Handle shooting logic here
+      console.log("Bang! Shooting at:", mouseX, mouseY);
+    });
+
+    // Initial crosshair placement at the center
+    drawCrosshair(canvas.width / 2, canvas.height / 2);
+
+    // Resize canvas dynamically with the window
+    window.addEventListener('resize', function () {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawCrosshair(canvas.width / 2, canvas.height / 2);
+    });
+  </script>
+</body>
+</html>
